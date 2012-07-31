@@ -69,11 +69,10 @@ class Request{
 	 */
 	public static function getIP(){
 		if(filter_has_var(INPUT_SERVER,'REMOTE_ADDR')){
-			$ip = $_SERVER['REMOTE_ADDR'];
-		}else{
-			$ip = "not detected";
+			return $_SERVER['REMOTE_ADDR'];
 		}
-		return $ip;
+		// If 'REMOTE_ADDR' exists, the function will return before this last return. 
+		return "not detected";
 	}
 
 	/**
@@ -83,34 +82,33 @@ class Request{
 		switch(strtoupper($type)){
 			case 'IBOOL':
 				// Return boolean as integer, 1 or 0.
-				$result = (int)filter_var($src, FILTER_VALIDATE_BOOLEAN);
+				return (int)filter_var($src, FILTER_VALIDATE_BOOLEAN);
 			break;
 			case 'BOOL':
-				$result = filter_var($src, FILTER_VALIDATE_BOOLEAN);
+				return filter_var($src, FILTER_VALIDATE_BOOLEAN);
 			break;
 			case 'INT':
 			case 'INTEGER':
-				$result = (int)filter_var($src, FILTER_SANITIZE_NUMBER_INT);
+				return (int)filter_var($src, FILTER_SANITIZE_NUMBER_INT);
 			break;
 			case 'FLOAT':
 			case 'DOUBLE':
-				$result = (float)filter_var($src, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+				return (float)filter_var($src, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 			break;
 			case 'STRING':
-				$result = (string)filter_var($src, FILTER_SANITIZE_STRING);
+				return (string)filter_var($src, FILTER_SANITIZE_STRING);
 			break;
 			case 'EMAIL':
-				$result = (string)filter_var($src, FILTER_SANITIZE_EMAIL);
+				return (string)filter_var($src, FILTER_SANITIZE_EMAIL);
 			break;
 			case 'ALNUM':
 				// Only run the regex if needed.
-				$result = (string)ctype_alnum($src) ? $src : preg_replace('/[^A-Z0-9]/i', '', $src);
+				return (string)ctype_alnum($src) ? $src : preg_replace('/[^A-Z0-9]/i', '', $src);
 			break;
 			default:
-				$result = $src;//(string)filter_var($src, FILTER_SANITIZE_SPECIAL_CHARS);
+				return $src;//(string)filter_var($src, FILTER_SANITIZE_SPECIAL_CHARS);
 			break;
 		}
-		return $result;
 	}
 }
 ?>
